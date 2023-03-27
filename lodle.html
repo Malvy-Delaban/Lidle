@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<style>
+    body {
+        background-image: url("lol.jpg");
+        background-size: cover;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+
+    #logo {
+        width: 12rem;
+        margin-bottom: 2em;
+    }
+
+    .selection {
+        margin-bottom: 2em;
+    }
+
+    select {
+        line-height: 1.5em;
+        padding: 0.5em;
+        margin-right: 1rem;
+        border-radius: 5px;
+        font-weight: bold;
+        border: thin solid lightgrey;
+
+        /* reset */
+        margin: 0;      
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    td {
+        padding: 0.5rem;
+        margin: 1rem;
+        border-radius: 0.2rem;
+        font-weight: 600;
+    }
+
+    th {
+        background-color: rgb(51, 48, 48);
+        color: white;
+        padding: 0.5rem 2rem;
+        margin: 1rem;
+        border-radius: 0.2rem;
+    }
+
+    button {
+        line-height: 1.5em;
+        padding: 0.5em 1em 0.5em 1em;
+        border-radius: 5px;
+        font-weight: bold;
+        border: thin solid lightgrey;
+    }
+
+    #solution-button {
+        position: absolute;
+        bottom: 2rem;
+    }
+
+    .main-container {
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .true {
+        background-color: #7eff82;
+    }
+
+    .part-wrong {
+        background-color: #ffb773;
+    }
+
+    .wrong {
+        background-color: #ff7e7e;
+    }
+</style>
+
+<script>
+
+// Since I did not find any free API that have those data, I simply generated them with ChatGPT
+    var champ = [
+    {
+    name: "Aatrox",
+    lane: ["Top", "Jungle"],
+    race: ["Darkin"],
+    gender: "Male",
+    ressource: "Manaless",
+    region: ["Runeterra"],
+    release: "2013"
+  },
+  {
+    name: "Ahri",
+    lane: ["Mid"],
+    race: ["Vastaya"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2011"
+  },
+  {
+    name: "Akali",
+    lane: ["Mid", "Top"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Energy",
+    region: ["Ionia"],
+    release: "2010"
+  },
+  {
+    name: "Alistar",
+    lane: ["Support"],
+    race: ["Minotaur"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Amumu",
+    lane: ["Jungle"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Anivia",
+    lane: ["Mid"],
+    race: ["Cryophoenix"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2009"
+  },
+  {
+    name: "Annie",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Ashe",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2009"
+  },
+  {
+    name: "Aurelion Sol",
+    lane: ["Mid"],
+    race: ["Dragon"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Targon"],
+    release: "2016"
+  },
+  {
+    name: "Azir",
+    lane: ["Mid"],
+    race: ["Shuriman"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2014"
+  },
+  {
+    name: "Bard",
+    lane: ["Support"],
+    race: ["Celestial"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2015"
+  },
+  {
+    name: "Blitzcrank",
+    lane: ["Support"],
+    race: ["Golem"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Brand",
+    lane: ["Support", "Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2011"
+  },
+  {
+    name: "Braum",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2014"
+  },
+  {
+    name: "Caitlyn",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover"],
+    release: "2011"
+  },
+  {
+    name: "Camille",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2016"
+  },
+  {
+    name: "Cassiopeia",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2010"
+  },
+  {
+    name: "Cho'Gath",
+    lane: ["Top", "Jungle"],
+    race: ["Voidborn"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Corki",
+    lane: ["Marksman"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bandle City", "Demacia"],
+    release: "2009"
+  },
+  {
+    name: "Darius",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2012"
+  },
+  {
+    name: "Diana",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Mount Targon"],
+    release: "2012"
+  },
+  {
+    name: "Dr. Mundo",
+    lane: ["Top", "Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Health",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Draven",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2012"
+  },
+  {
+    name: "Ekko",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Zaun"],
+    release: "2015"
+  },
+  {
+    name: "Elise",
+    lane: ["Jungle"],
+    race: ["Human", "Spider"],
+    gender: "Female",
+    ressource: "Spider Form",
+    region: ["Shadow"],
+    release: "2012",
+  },
+  {
+    name: "Evelynn",
+    lane: ["Jungle"],
+    race: ["Demon"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Ezreal",
+    lane: ["Mid", "Marksman"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover"],
+    release: "2010"
+  },
+  {
+    name: "Fiddlesticks",
+    lane: ["Jungle", "Support"],
+    race: ["Harbinger"],
+    gender: "Unknown",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+  },
+  {
+    name: "Fiora",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2012"
+  },
+  {
+    name: "Fizz",
+    lane: ["Mid"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2011"
+  },
+  {
+    name: "Galio",
+    lane: ["Mid", "Support"],
+    race: ["Gargoyle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2010"
+  },
+  {
+    name: "Gangplank",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2009"
+  },
+  {
+    name: "Garen",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Manaless",
+    region: ["Demacia"],
+    release: "2010"
+  },
+  {
+    name: "Gnar",
+    lane: ["Top"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Rage",
+    region: ["Runeterra"],
+    release: "2014"
+  },
+  {
+    name: "Gragas",
+    lane: ["Jungle", "Top", "Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2010"
+  },
+  {
+    name: "Graves",
+    lane: ["Jungle", "Marksman"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2011"
+  },
+  {
+    name: "Gwen",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2021"
+  },
+  {
+    name: "Hecarim",
+    lane: ["Jungle"],
+    race: ["Centaur"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2012"
+  },
+  {
+    name: "Heimerdinger",
+    lane: ["Mid", "Top", "Support"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover"],
+    release: "2009"
+  },
+  {
+    name: "Illaoi",
+    lane: ["Top"],
+    race: ["Kraken"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2015"
+  },
+  {
+    name: "Irelia",
+    lane: ["Top", "Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2010"
+  },
+  {
+    name: "Ivern",
+    lane: ["Jungle", "Support"],
+    race: ["Tree"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2016"
+  },
+  {
+    name: "Janna",
+    lane: ["Support"],
+    race: ["Avatar"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Zaun"],
+    release: "2009"
+  },
+  {
+    name: "Jarvan IV",
+    lane: ["Jungle", "Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2011"
+  },
+  {
+    name: "Jax",
+    lane: ["Top", "Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Icathia"],
+    release: "2009"
+  },
+  {
+    name: "Jayce",
+    lane: ["Top", "Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover"],
+    release: "2012"
+  },
+  {
+    name: "Jhin",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2016"
+  },
+  {
+    name: "Jinx",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2013"
+  },
+  {
+  name: "Kai'Sa",
+  lane: ["Marksman", "Mid"],
+  race: ["Human", "Voidborn"],
+  gender: "Female",
+  ressource: "Mana",
+  region: ["Runeterra"],
+  release: "2018"
+},
+  {
+    name: "Kalista",
+    lane: ["Marksman"],
+    race: ["Spectral"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2014"
+  },
+  {
+    name: "Karma",
+    lane: ["Mid", "Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2011"
+  },
+  {
+    name: "Karthus",
+    lane: ["Mid"],
+    race: ["Lich"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2009"
+  },
+  {
+    name: "Kassadin",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Void"],
+    release: "2009"
+  },
+  {
+    name: "Katarina",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Manaless",
+    region: ["Noxus"],
+    release: "2009"
+  },
+  {
+    name: "Kayle",
+    lane: ["Top", "Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2009"
+  },
+  {
+    name: "Kayn",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2017"
+  },
+  {
+    name: "Kennen",
+    lane: ["Top", "Mid"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Energy",
+    region: ["Ionia"],
+    release: "2010"
+  },
+  {
+    name: "Kha'Zix",
+    lane: ["Jungle"],
+    race: ["Voidreaver"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Void"],
+    release: "2012"
+  },
+  {
+    name: "Kindred",
+    lane: ["Jungle"],
+    race: ["Lamb and Wolf"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2015"
+  },
+  {
+    name: "Kled",
+    lane: ["Top"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Courage",
+    region: ["Noxus"],
+    release: "2016"
+  },
+  {
+    name: "Kog'Maw",
+    lane: ["Marksman"],
+    race: ["Voidspawn"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Void"],
+    release: "2010"
+  },
+  {
+    name: "LeBlanc",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2010"
+  },
+  {
+    name: "Lee Sin",
+    lane: ["Jungle", "Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Energy",
+    region: ["Ionia"],
+    release: "2011"
+    },
+    {
+    name: "Leona",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Targon"],
+    release: "2011"
+    },
+    {
+    name: "Lillia",
+    lane: ["Jungle"],
+    race: ["Fae"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2020"
+    },
+    {
+    name: "Lissandra",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2013"
+    },
+    {
+    name: "Lucian",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2013"
+    },
+    {
+    name: "Lulu",
+    lane: ["Support"],
+    race: ["Yordle"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Bandle City"],
+    release: "2012"
+    },
+    {
+    name: "Lux",
+    lane: ["Mid", "Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2010"
+    },
+    {
+    name: "Malphite",
+    lane: ["Top"],
+    race: ["Rock"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ixtal"],
+    release: "2009"
+    },
+    {
+    name: "Malzahar",
+    lane: ["Mid"],
+    race: ["Voidborn"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Void"],
+    release: "2010"
+    },
+    {
+    name: "Maokai",
+    lane: ["Top"],
+    race: ["Tree"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2011"
+    },
+    {
+    name: "Master Yi",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2009"
+    },
+    {
+    name: "Miss Fortune",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2010"
+    },
+    {
+    name: "Mordekaiser",
+    lane: ["Top"],
+    race: ["Iron revenant"],
+    gender: "Male",
+    ressource: "Shield",
+    region: ["Noxus"],
+    release: "2009"
+    },
+    {
+    name: "Morgana",
+    lane: ["Mid", "Support"],
+    race: ["Fallen Angel"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2009"
+    },
+    {
+    name: "Nami",
+    lane: ["Support"],
+    race: ["Mermaid"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Tidecaller"],
+    release: "2012"
+    },
+    {
+    name: "Nasus",
+    lane: ["Top"],
+    race: ["Ascended"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2009"
+    },
+    {
+    name: "Nautilus",
+    lane: ["Support"],
+    race: ["Titan"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2012"
+    },
+    {
+    name: "Neeko",
+    lane: ["Mid"],
+    race: ["Vastaya"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ixtal"],
+    release: "2018"
+    },
+    {
+    name: "Nidalee",
+    lane: ["Jungle"],
+    race: ["Human", "Cougar"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Jonian"],
+    release: "2009"
+    },
+    {
+    name: "Nocturne",
+    lane: ["Jungle"],
+    race: ["Nightmare"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2011"
+    },
+    {
+    name: "Nunu & Willump",
+    lane: ["Jungle"],
+    race: ["Human", "Yeti"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2009"
+    },
+    {
+    name: "Olaf",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2010"
+    },
+    {
+    name: "Orianna",
+    lane: ["Mid"],
+    race: ["Mechanized"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover"],
+    release: "2011"
+    },
+    {
+    name: "Ornn",
+    lane: ["Top"],
+    race: ["Demigod"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2017"
+    },
+    {
+    name: "Pantheon",
+    lane: ["Top", "Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Targon"],
+    release: "2010"
+    },
+    {
+    name: "Poppy",
+    lane: ["Top"],
+    race: ["Yordle"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2010"
+    },
+    {
+    name: "Pyke",
+    lane: ["Support"],
+    race: ["Human", "Demon"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bilgewater"],
+    release: "2018"
+    },
+    {
+    name: "Qiyana",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ixtal"],
+    release: "2019"
+    },
+    {
+    name: "Quinn",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2013"
+    },
+    {
+    name: "Rakan",
+    lane: ["Support"],
+    race: ["Vastaya"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2017"
+    },
+    {
+    name: "Rammus",
+    lane: ["Jungle"],
+    race: ["Armadillo"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2009"
+    },
+    {
+    name: "Rek'Sai",
+    lane: ["Jungle"],
+    race: ["Voidborn"],
+    gender: "Female",
+    ressource: "Rage",
+    region: ["Shurima"],
+    release: "2014"
+    },
+    {
+    name: "Rell",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2020"
+    },
+    {
+    name: "Renekton",
+    lane: ["Top"],
+    race: ["Ascended"],
+    gender: "Male",
+    ressource: "Fury",
+    region: ["Shurima"],
+    release: "2011"
+    },
+    {
+    name: "Rengar",
+    lane: ["Jungle"],
+    race: ["Vastaya"],
+    gender: "Male",
+    ressource: "Ferocity",
+    region: ["Ionia"],
+    release: "2012"
+    },
+    {
+    name: "Riven",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Manaless",
+    region: ["Noxus"],
+    release: "2011"
+    },
+    {
+    name: "Rumble",
+    lane: ["Top"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Heat",
+    region: ["Bandle City"],
+    release: "2011"
+    },
+    {
+    name: "Ryze",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+    },
+    {
+    name: "Samira",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Manaless",
+    region: ["Ionia"],
+    release: "2020"
+    },
+    {
+    name: "Sejuani",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2012"
+    },
+    {
+    name: "Senna",
+    lane: ["Marksman", "Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2019"
+    },
+    {
+    name: "Seraphine",
+    lane: ["Mid", "Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2020",
+    },
+    {
+    name: "Sett",
+    lane: ["Top", "Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Grit",
+    region: ["Ionia"],
+    release: "2020"
+    },
+    {
+    name: "Shaco",
+    lane: ["Jungle"],
+    race: ["Demon"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+    },
+    {
+    name: "Shen",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Energy",
+    region: ["Ionia"],
+    release: "2010"
+    },
+    {
+    name: "Shyvana",
+    lane: ["Jungle"],
+    race: ["Dragon"],
+    gender: "Female",
+    ressource: "Fury",
+    region: ["Demacia"],
+    release: "2011"
+    },
+    {
+    name: "Singed",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2009"
+    },
+    {
+    name: "Sion",
+    lane: ["Top"],
+    race: ["Undead"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2009"
+    },
+    {
+    name: "Sivir",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2010"
+    },
+    {
+    name: "Skarner",
+    lane: ["Jungle"],
+    race: ["Scorpion"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2011"
+    },
+    {
+    name: "Sona",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2010"
+    },
+    {
+    name: "Soraka",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Mount Targon"],
+    release: "2010"
+    },
+    {
+    name: "Swain",
+    lane: ["Mid", "Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2010"
+    },
+    {
+    name: "Sylas",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Energy",
+    region: ["Demacia"],
+    release: "2019"
+    },
+    {
+    name: "Syndra",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2012"
+    },
+    {
+      name: "Tahm Kench",
+      lane: ["Support", "Top"],
+      race: ["River King"],
+      gender: "Male",
+      ressource: "Mana",
+      region: ["Runeterra"],
+      release: "2015"
+    },
+    {
+    name: "Taliyah",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2016"
+    },
+    {
+    name: "Talon",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2011"
+    },
+    {
+    name: "Taric",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Mount Targon"],
+    release: "2009"
+    },
+    {
+    name: "Teemo",
+    lane: ["Top"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bandle City"],
+    release: "2009"
+    },
+    {
+    name: "Thresh",
+    lane: ["Support"],
+    race: ["Undead"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2013"
+    },
+    {
+    name: "Tristana",
+    lane: ["Marksman"],
+    race: ["Yordle"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Bandle City"],
+    release: "2009"
+    },
+    {
+    name: "Trundle",
+    lane: ["Top"],
+    race: ["Troll"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2010"
+    },
+    {
+    name: "Tryndamere",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Fury",
+    region: ["Freljord"],
+    release: "2009"
+    },
+    {
+    name: "Twisted Fate",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2009"
+    },
+    {
+    name: "Twitch",
+    lane: ["Marksman"],
+    race: ["Rat"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2009"
+    },
+    {
+    name: "Udyr",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2009"
+    },
+    {
+    name: "Urgot",
+    lane: ["Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Noxus"],
+    release: "2010"
+    },
+    {
+    name: "Varus",
+    lane: ["Marksman"],
+    race: ["Darkin"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Runeterra"],
+    release: "2012"
+    },
+    {
+    name: "Vayne",
+    lane: ["Marksman"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2011"
+    },
+    {
+    name: "Veigar",
+    lane: ["Mid"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Bandle City"],
+    release: "2010"
+    },
+    {
+    name: "Vel'Koz",
+    lane: ["Mid"],
+    race: ["Voidborn"],
+    gender: "Unknown",
+    ressource: "Mana",
+    region: ["Void"],
+    release: "2014"
+    },
+    {
+    name: "Vi",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2012"
+    },
+    {
+    name: "Viego",
+    lane: ["Jungle"],
+    race: ["Human", "Undead"],
+    gender: "Male",
+    ressource: "Health",
+    region: ["Shadow Isles"],
+    release: "2021"
+    },
+    {
+    name: "Viktor",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2011"
+    },
+    {
+    name: "Vladimir",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Health",
+    region: ["Noxus"],
+    release: "2010"
+    },
+    {
+    name: "Volibear",
+    lane: ["Jungle"],
+    race: ["Bear"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2012"
+    },
+    {
+    name: "Warwick",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Freljord"],
+    release: "2009"
+    },
+    {
+    name: "Wukong",
+    lane: ["Top"],
+    race: ["Animal"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2011"
+    },
+    {
+    name: "Xayah",
+    lane: ["Marksman"],
+    race: ["Vastayan"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2017"
+    },
+    {
+    name: "Xerath",
+    lane: ["Mid"],
+    race: ["Undead"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shurima"],
+    release: "2011"
+    },
+    {
+    name: "Xin Zhao",
+    lane: ["Jungle"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Demacia"],
+    release: "2010"
+    },
+    {
+    name: "Yasuo",
+    lane: ["Mid", "Top"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Flow",
+    region: ["Ionia"],
+    release: "2013"
+    },
+    {
+    name: "Yone",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Manaless",
+    region: ["Ionia"],
+    release: "2020"
+    },
+    {
+    name: "Yorick",
+    lane: ["Top"],
+    race: ["Undead"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Shadow Isles"],
+    release: "2011"
+    },
+    {
+    name: "Yuumi",
+    lane: ["Support"],
+    race: ["Feline"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Bandle City"],
+    release: "2019"
+    },
+    {
+    name: "Zac",
+    lane: ["Jungle"],
+    race: ["Blob"],
+    gender: "Male",
+    ressource: "Health",
+    region: ["Zaun"],
+    release: "2013"
+    },
+    {
+    name: "Zed",
+    lane: ["Mid"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Energy",
+    region: ["Ionia"],
+    release: "2012"
+    },
+    {
+    name: "Ziggs",
+    lane: ["Mid"],
+    race: ["Yordle"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Piltover", "Zaun"],
+    release: "2012"
+    },
+    {
+    name: "Zilean",
+    lane: ["Support"],
+    race: ["Human"],
+    gender: "Male",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2009"
+    },
+    {
+    name: "Zoe",
+    lane: ["Mid"],
+    race: ["Aspect"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Targon"],
+    release: "2017"
+    },
+    {
+    name: "Zyra",
+    lane: ["Support"],
+    race: ["Plant"],
+    gender: "Female",
+    ressource: "Mana",
+    region: ["Ionia"],
+    release: "2012"
+    }
+];
+
+    var champNames = [];
+    var randomId = getRandomInt(champ.length);
+    var text = "";
+    var classes = [
+        "wrong",
+        "part-wrong",
+        "true"
+    ];
+
+    for (let i = 0; i < champ.length; i++) {
+        champNames[i] = champ[i].name;
+    }
+
+    for(let i = 0; i < champ.length; i++) {
+        champ[i].lane = champ[i].lane.sort();
+        champ[i].race = champ[i].race.sort();
+        champ[i].region = champ[i].region.sort();
+    }
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
+    function findCommonElement(array1, array2) {
+         for(let i = 0; i < array1.length; i++) {
+            for(let j = 0; j < array2.length; j++) {
+                if(array1[i] === array2[j]) {
+                    return true;
+                }
+            }
+         }
+         return false;
+     }
+
+    function isSameValue(a, b, type, field) {
+        if (type === "string")
+            return (champ[a][field] === champ[b][field] ? 2 : 0);
+        else if (type === "arr")
+            if (champ[a][field].join(",") === champ[b][field].join(","))
+                return 2;
+            else
+                return (findCommonElement(champ[a][field], champ[b][field]) ? 1 : 0);
+        else
+            return 0;
+    }
+
+    function checkChamp() {
+        for (let i = 0; i < champ.length; i++) {
+            if (document.getElementById('selectChamp').value === champ[i].name) {
+                PrintChampLine(i);
+            }
+        }
+    }
+
+    function PrintChampLine(index) {
+        text = '<tr>';
+        text += '<td class="' + classes[isSameValue(index, randomId, "string", "name")] + '">' + champ[index].name + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "arr", "lane")] + '">' + champ[index].lane.sort().join(',') + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "arr", "race")] + '">' + champ[index].race.sort().join(',') + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "string", "gender")] + '">' + champ[index].gender + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "string", "ressource")] + '">' + champ[index].ressource + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "arr", "region")] + '">' + champ[index].region.sort().join(',') + "</td>";
+        text += '<td class="' + classes[isSameValue(index, randomId, "string", "release")] + '">' + champ[index].release + "</td>";
+        text += '</tr>';
+
+        var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+        var newRow = tableRef.insertRow(tableRef.rows.length);
+        newRow.innerHTML = text;
+    }
+  
+</script>
+
+<div class="main-container">
+    <img id="logo" src="color_logo.png">
+    <div class="selection">
+        <select id="selectChamp">
+            <option>Choose a champion</option>
+        </select>
+        <button type="button" onclick='checkChamp()'>🔍</button>
+    </div>
+    <div class="my-table">
+        <table id="myTable">
+            <tr>
+              <th>Name</th>
+              <th>Lane</th>
+              <th>Race</th>
+              <th>Gender</th>
+              <th>Ressource</th>
+              <th>Region</th>
+              <th>Release</th>
+            </tr>
+        </table>
+    </div>
+    <button id="solution-button" type="button" onclick='PrintChampLine(randomId)'>Get Solution</button>
+
+</div>
+</body>
+<script>
+    for (var i = 0; i < champNames.length; i++) {
+        var opt = champNames[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        document.getElementById("selectChamp").appendChild(el);
+    }
+</script>
+</html>
